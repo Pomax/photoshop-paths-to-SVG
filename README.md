@@ -1,4 +1,5 @@
-# photoshop-paths-to-SVG
+# Converting Pphotoshop paths to SVG
+
 This is a photoshop "jsx" script that turns all paths in the active document
 into a single SVG file for use in something else. Simply download the script
 to "somewhere", then run it through *file* → *scripts* → *browse*, find the
