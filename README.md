@@ -1,5 +1,9 @@
 # Converting Photoshop paths to SVG
 
+Grab the file here:
+
+<a href="https://raw.githubusercontent.com/Pomax/photoshop-paths-to-SVG/master/pathtosvg.jsx" download="pathtosvg.jsx">pathtosvg.jsx</a>
+
 This is a photoshop "jsx" script that turns all paths in the active document
 into a single SVG file for use in something else. Simply download the script
 to "somewhere", then run it through *file* → *scripts* → *browse*, find the
