@@ -22,3 +22,7 @@ Type a filename - if you already have a file name with that name, you'll be aske
 Once you accept, Photoshop will save the paths to SVG and inform you it finished:
 
 ![screenshot 203](https://cloud.githubusercontent.com/assets/177243/13692103/3ec50b84-e6f3-11e5-9662-b0060118419d.png)
+
+We can then open the SVG in whatever target application we need. For instance, Inkscape:
+
+![screenshot 200](https://cloud.githubusercontent.com/assets/177243/13687518/8dcc9968-e6d0-11e5-84c1-ebe3c45c6615.png)
