@@ -11,14 +11,14 @@ script and open it.
 
 ![screenshot 197](https://cloud.githubusercontent.com/assets/177243/13687396/db3b5532-e6cf-11e5-9a50-b151e13b8761.png)
 
-This will immediately run the conversion and put the result in your clipboard:
+This will immediately run the conversion and prompt you with a save dialog
 
-![screenshot 198](https://cloud.githubusercontent.com/assets/177243/13687406/e9c8dc14-e6cf-11e5-9379-236830b2f953.png)
+![screenshot 201](https://cloud.githubusercontent.com/assets/177243/13692086/257d7a1c-e6f3-11e5-96c7-acb5f5fb14b8.png)
 
-You can then paste this into a text editor and save it somewhere:
+Type a filename - if you already have a file name with that name, you'll be asked whether you want to overwrite that file:
 
-![screenshot 199](https://cloud.githubusercontent.com/assets/177243/13687441/278b73b8-e6d0-11e5-87aa-39d563459e1a.png)
+![screenshot 202](https://cloud.githubusercontent.com/assets/177243/13692100/3b262d96-e6f3-11e5-8ef7-0315e989c0aa.png)
 
-Saving this and opening this in something like Inkscape gives us:
+Once you accept, Photoshop will save the paths to SVG and inform you it finished:
 
-![screenshot 200](https://cloud.githubusercontent.com/assets/177243/13687518/8dcc9968-e6d0-11e5-84c1-ebe3c45c6615.png)
+![screenshot 203](https://cloud.githubusercontent.com/assets/177243/13692103/3ec50b84-e6f3-11e5-9662-b0060118419d.png)
