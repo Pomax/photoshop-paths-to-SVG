@@ -92,13 +92,18 @@ var types = {
   'PointKind.SMOOTHPOINT': 'C'
 };
 
-// clipboard function
-function copyTextToClipboard(data) {
-  var keyTextData = app.charIDToTypeID('TxtD');
-  var ktextToClipboardStr = app.stringIDToTypeID( "textToClipboard" );
-  var textStrDesc = new ActionDescriptor();
-  textStrDesc.putString( keyTextData, data );
-  executeAction( ktextToClipboardStr, textStrDesc, DialogModes.NO );
+// filewrite function
+function writeToFile(data) {
+  var path = app.activeDocument.path || 'C:';
+  var dir = Folder(path);
+  var file = dir.saveDlg('', '.svg', true);
+  if (!file) return false;
+
+  var mode = 'w';
+  file.open(mode);
+  file.write(data);
+  file.close(mode);
+  return file.toString();
 }
 
 // convert a PathPoint to a real object.
@@ -189,6 +194,8 @@ function formPathCollectionSVG(pathCollection) {
 
 var improved = convertPaths(activeDoc.pathItems);
 var svg = formPathCollectionSVG(improved);
-copyTextToClipboard(svg)
-alert("svg copied to clipboard");
+var filepath = writeToFile(svg);
+if (!!filepath) {
+  alert("svg saved to " + filepath);
+}
 app.preferences.rulerUnits = origUnits;
