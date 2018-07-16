@@ -13,11 +13,11 @@ script and open it.
 
 This will immediately run the conversion and prompt you with a save dialog
 
-![screenshot 201](https://cloud.githubusercontent.com/assets/177243/13692086/257d7a1c-e6f3-11e5-96c7-acb5f5fb14b8.png)
+![screenshot 201](https://user-images.githubusercontent.com/177243/42773813-44a7bca6-88e3-11e8-8e80-ed00cc72455d.png)
 
 Type a filename - if you already have a file name with that name, you'll be asked whether you want to overwrite that file:
 
-![screenshot 202](https://cloud.githubusercontent.com/assets/177243/13692100/3b262d96-e6f3-11e5-8ef7-0315e989c0aa.png)
+![screenshot 202](https://user-images.githubusercontent.com/177243/42773815-47a53154-88e3-11e8-904c-bafcfe97d6a1.png)
 
 Once you accept, Photoshop will save the paths to SVG and inform you it finished:
 
