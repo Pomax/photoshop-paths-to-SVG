@@ -2,7 +2,7 @@
 
 Grab the file here:
 
-<a href="https://raw.githubusercontent.com/Pomax/photoshop-paths-to-SVG/master/pathtosvg%2Cjsx" download>pathtosvg.jsx</a>
+<a href="https://raw.githubusercontent.com/Pomax/photoshop-paths-to-SVG/master/pathtosvg.jsx" download>pathtosvg.jsx</a>
 
 This is a photoshop "jsx" script that turns all paths in the active document
 into a single SVG file for use in something else. Simply download the script
