@@ -6,46 +6,40 @@
  * Seriously: wtf, Adobe?
  **/
 
-//
-// First: functions that do what modern JS already does. We can't
-//        even use Array.prototype extension. Badgers.
+// First: functions that do what modern JS already does.
 
-function forEach(arr, f) {
-  for(var i=0, e=arr.length; i<e; i++) {
-    f(arr[i], i);
+Array.prototype.map = function(f) {
+  var retArr = [];
+  for (var i = 0, e = this.length; i < e; i++) {
+    retArr[i] = f(this[i], i);
   }
+  return retArr;
 };
 
-function map(arr, f) {
-  var a = [];
-  for(var i=0, e=arr.length; i<e; i++) {
-    a[i] = f(arr[i], i);
-  }
-  return a;
+Array.prototype.forEach = function(f) {
+  this.map(f);
 };
 
-function keys(o) {
-  var a = [];
-  for (prop in o) {
-    if (o.hasOwnProperty(prop)) {
-      a.push(prop);
-    }
+Array.from = function(iterable) {
+  var retArr = [];
+  for (var i = 0, e = iterable.length; i < e; i++) {
+    retArr.push(iterable[i]);
   }
-  return a;
-};
+  return retArr;
+}
 
 //
 // Also we'll need some custom objects.
 //
 
-var Point = function(kind, x, y) {
+var Point = function (kind, x, y) {
   this.kind = kind;
   this.x = x;
   this.y = y;
 }
 
 Point.prototype = {
-  toString: function() {
+  toString: function () {
     var base = [this.kind];
     if (this.in) {
       base = base.concat(['(', this.in.x, this.in.y, ')']);
@@ -58,7 +52,7 @@ Point.prototype = {
   }
 }
 
-var BBox = function() {
+var BBox = function () {
   this.mx = 9999999;
   this.my = 9999999;
   this.MX = -9999999;
@@ -66,7 +60,7 @@ var BBox = function() {
 };
 
 BBox.prototype = {
-  grow: function(p) {
+  grow: function (p) {
     if (!p) return;
     if (p.x < this.mx) { this.mx = p.x; }
     if (p.y < this.my) { this.my = p.y; }
@@ -81,13 +75,7 @@ BBox.prototype = {
 // And with that out of the way, the actual script:
 //
 
-#target photoshop
-var activeDoc = app.activeDocument;
-
-var origUnits = app.preferences.rulerUnits;
-app.preferences.rulerUnits = Units.PIXELS;
-
-var types = {
+var pointTypes = {
   'PointKind.CORNERPOINT': 'P',
   'PointKind.SMOOTHPOINT': 'C'
 };
@@ -108,22 +96,21 @@ function writeToFile(data) {
 
 // convert a PathPoint to a real object.
 function improvePoint(point) {
-  var kind = types[point.kind];
+  var kind = pointTypes[point.kind];
   var coord = point.anchor;
   var x = Math.round(coord[0]);
   var y = Math.round(coord[1]);
+  var obj = new Point(kind, x, y);
 
-  var obj = new Point(kind,x,y);
-
-  if (kind==='C') {
-    var d, dx, dy;
+  if (kind === 'C') {
+    var d;
     if (point.leftDirection) {
-      d = map(point.leftDirection, Math.round);
-      obj.out = { x:d[0], y:d[1] };
+      d = point.leftDirection.map(Math.round);
+      obj.out = { x: d[0], y: d[1] };
     }
     if (point.rightDirection) {
-      d = map(point.rightDirection, Math.round);
-      obj.in = { x:d[0], y:d[1] };
+      d = point.rightDirection.map(Math.round);
+      obj.in = { x: d[0], y: d[1] };
     }
   }
 
@@ -132,17 +119,20 @@ function improvePoint(point) {
 
 // convert all points in a subpath to easier to parse form
 function handleSubPath(subpath) {
-  return map(subpath.pathPoints, improvePoint);
+  var pathPoints = Array.from(subpath.pathPoints);
+  return pathPoints.map(improvePoint);
 };
 
 // convert all subpaths in a path to easier to walk form
 function handlePath(path) {
-  return map(path.subPathItems, handleSubPath);
+  var subPaths = Array.from(path.subPathItems);
+  return subPaths.map(handleSubPath);
 };
 
 // convert all paths in a document to easier to walk form.
 function convertPaths(pathItems) {
-  return map(pathItems, handlePath);
+  var paths = Array.from(pathItems);
+  return paths.map(handlePath);
 }
 
 // turn a subpath of improved points into an SVG path
@@ -151,8 +141,8 @@ function formSVGpath(subpath, bbox) {
   var path = ['M', p0.x, p0.y];
   // we want to close this path:
   subpath.push(p0);
-  forEach(subpath, function(p, i) {
-    if (i===0) return;
+  subpath.forEach(function (p, i) {
+    if (i === 0) return;
     bbox.grow(p);
 
     if (p0.kind === 'P' && p.kind === 'P') {
@@ -177,9 +167,9 @@ function formSVGpath(subpath, bbox) {
 function formPathCollectionSVG(pathCollection) {
   var svg = [];
   var bbox = new BBox();
-  forEach(pathCollection, function(path) {
+  pathCollection.forEach(function (path) {
     var d = '';
-    forEach(path, function(subpath) {
+    path.forEach(function (subpath) {
       d += formSVGpath(subpath, bbox);
     });
     svg.push('<path fill="black" stroke="black" d="' + d + '"/>');
@@ -187,15 +177,29 @@ function formPathCollectionSVG(pathCollection) {
   svg.push('</svg>');
   var w = bbox.MX - bbox.mx;
   var h = bbox.MY - bbox.my;
-  var header = '<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+w+'" viewBox="'+[bbox.mx,bbox.my,w,h].join(' ')+'">';
+  var header = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + w + '" viewBox="' + [bbox.mx, bbox.my, w, h].join(' ') + '">';
   svg = [header].concat(svg);
   return svg.join('\n');;
 }
 
+// ===========================================
+//
+//           JS equivalent of main()
+//
+// ===========================================
+
+#target photoshop
+
+// switch to using pixels as unit, irrespective of what the document is set to
+var activeDoc = app.activeDocument;
+var origUnits = app.preferences.rulerUnits;
+app.preferences.rulerUnits = Units.PIXELS;
+
+// convert all paths and write them to file
 var improved = convertPaths(activeDoc.pathItems);
 var svg = formPathCollectionSVG(improved);
 var filepath = writeToFile(svg);
-if (!!filepath) {
-  alert("svg saved to " + filepath);
-}
+if (!!filepath) alert("svg saved to " + filepath);
+
+// switch back to the original document's units once we're done.
 app.preferences.rulerUnits = origUnits;
