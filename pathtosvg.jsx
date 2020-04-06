@@ -82,7 +82,9 @@ var pointTypes = {
 
 // filewrite function
 function writeToFile(data) {
-  var path = app.activeDocument.path || 'C:';
+  var path = '/';
+  // can we get a file location from the current document?
+  try { path = app.activeDocument.path; } catch (e) { }
   var dir = Folder(path);
   var file = dir.saveDlg('', '.svg', true);
   if (!file) return false;
@@ -172,7 +174,7 @@ function formPathCollectionSVG(pathCollection) {
     path.forEach(function (subpath) {
       d += formSVGpath(subpath, bbox);
     });
-    svg.push('<path fill="black" stroke="black" d="' + d + '"/>');
+    svg.push('<path fill="black" stroke="black" fill-rule="evenodd" d="' + d + '"/>');
   });
   svg.push('</svg>');
   var w = bbox.MX - bbox.mx;
